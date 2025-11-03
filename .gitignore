@@ -1,0 +1,12 @@
+# Ignoră fișierele VS Code și cache-ul Angular
+.vscode/
+.angular/
+
+# Ignoră fișierele compilate din Spring Boot (Backend)
+/backend-auth/target/
+/backend-auth/mvnw.cmd
+/backend-auth/.mvn/
+
+# Ignoră dependențele din Angular (Frontend)
+/frontend-shoponline/node_modules/
+/frontend-shoponline/dist/

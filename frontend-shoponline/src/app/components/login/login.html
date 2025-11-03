@@ -1,0 +1,34 @@
+<div class="login-container">
+  <h2>Autentificare</h2>
+  
+  <form (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="username">Utilizator:</label>
+      <input 
+        type="text" 
+        id="username" 
+        name="username"
+        [(ngModel)]="username" 
+        required
+      >
+    </div>
+    
+    <div class="form-group">
+      <label for="password">Parolă:</label>
+      <input 
+        type="password" 
+        id="password" 
+        name="password"
+        [(ngModel)]="password" 
+        required
+      >
+    </div>
+    
+    <button type="submit">Loghează-te</button>
+  </form>
+
+  <p *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </p>
+
+</div>
