@@ -1,93 +1,114 @@
 package com.shoponline.backend_auth.config;
 
-import java.util.Arrays;
+import java.util.Arrays; // <-- Importă filtrul
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.crypto.password.PasswordEncoder; // <-- Import nou (Stateless)
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-@Configuration 
-@EnableWebSecurity 
+import com.shoponline.backend_auth.filter.JwtRequestFilter;
+import com.shoponline.backend_auth.model.User; // <-- Import nou (pentru filtru)
+import com.shoponline.backend_auth.repository.UserRepository;
+
+@Configuration
+@EnableWebSecurity
 public class SecurityConfig {
 
-    // 1. Definirea Regulilor de Securitate și Acces
+    @Autowired
+    private UserRepository userRepository;
+    
+    @Autowired
+    private JwtRequestFilter jwtRequestFilter; // <-- Injectăm filtrul nostru
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            // Dezactivăm CSRF (Angular trimite cereri AJAX, nu formulare clasice)
-            .csrf(AbstractHttpConfigurer::disable) 
-            // Aplicăm configurația CORS (pentru Angular)
+            .csrf(AbstractHttpConfigurer::disable)
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             
-            // Definirea regulilor de autorizare bazate pe URL-uri
             .authorizeHttpRequests(authorize -> authorize
-                // Endpoint-ul de login este accesibil tuturor
-                .requestMatchers("/api/auth/login").permitAll() 
-                // Doar utilizatorii cu rolul "ADMIN" au acces la aceste URL-uri
-                .requestMatchers("/api/admin/**").hasRole("ADMIN") 
-                // Utilizatorii cu rolurile "CLIENT" SAU "ADMIN" au acces
-                .requestMatchers("/api/client/**").hasAnyRole("CLIENT", "ADMIN") 
-                // Toate celelalte cereri necesită autentificare
-                .anyRequest().authenticated() 
+                .requestMatchers("/api/auth/login").permitAll() // Permitem endpoint-ul de login
+                .requestMatchers("/h2-console/**").permitAll()
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                .requestMatchers("/api/client/**").hasAnyRole("CLIENT", "ADMIN")
+                .anyRequest().authenticated()
             )
-            // Configurăm autentificarea de bază (Username/Parolă)
-            .httpBasic(basic -> {}); 
             
+            // SCHIMBARE MAJORĂ: Setăm sesiunea ca STATELESS (fără stare)
+            // Nu mai folosim httpBasic()
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        
+        // Adăugăm filtrul nostru JWT *înainte* de filtrul de autentificare standard
+        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+
+        http.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()));
+
         return http.build();
     }
+
+    // Expunem AuthenticationManager ca un Bean (necesar pentru AuthController)
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
     
-    // 2. Criptarea Parolelor
+    // --- Restul fișierului rămâne la fel ---
+
     @Bean
     public PasswordEncoder passwordEncoder() {
-        // BCrypt este cel mai recomandat algoritm de hashing
-        return new BCryptPasswordEncoder(); 
+        return new BCryptPasswordEncoder();
     }
     
-    // 3. Crearea Utilizatorilor de Test (În Memorie)
-    @Bean
-    public UserDetailsService users() {
-        // Utilizator Administrator: username=admin, parola=adminpass
-        UserDetails admin = User.builder()
-            .username("admin")
-            .password(passwordEncoder().encode("adminpass")) 
-            .roles("ADMIN")
-            .build();
-        
-        // Utilizator Client: username=client, parola=clientpass
-        UserDetails client = User.builder()
-            .username("client")
-            .password(passwordEncoder().encode("clientpass"))
-            .roles("CLIENT")
-            .build();
 
-        // Returnează o listă de utilizatori stocată în memoria aplicației
-        return new InMemoryUserDetailsManager(admin, client);
-    }
     
-    // 4. Configurarea CORS (Cross-Origin Resource Sharing)
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        // Specifică de unde (ce domeniu/port) poate veni cererea Angular
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200")); 
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+        // IMPORTANT: Trebuie să permitem și header-ul "Authorization" (pentru Bearer Token)
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("*")); // Permite toate headerele
-        configuration.setAllowCredentials(true); // Permite trimiterea de cookies/detalii de autentificare
+        configuration.setAllowCredentials(true);
         
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
+    }
+
+    @Bean
+    public CommandLineRunner initDatabase(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        // (Această metodă rămâne exact la fel ca înainte, adaugă userii)
+        return args -> {
+            if (userRepository.findByUsername("admin").isEmpty()) {
+                User admin = new User();
+                admin.setUsername("admin");
+                admin.setPassword(passwordEncoder.encode("adminpass"));
+                admin.setRole("ROLE_ADMIN");
+                userRepository.save(admin);
+                System.out.println(">>> Utilizatorul ADMIN a fost creat.");
+            }
+            if (userRepository.findByUsername("client").isEmpty()) {
+                User client = new User();
+                client.setUsername("client");
+                client.setPassword(passwordEncoder.encode("clientpass"));
+                client.setRole("ROLE_CLIENT");
+                userRepository.save(client);
+                System.out.println(">>> Utilizatorul CLIENT a fost creat.");
+            }
+        };
     }
 }
