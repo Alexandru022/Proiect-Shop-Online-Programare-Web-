@@ -1,1 +1,25 @@
-<p>client-dashboard works!</p>
+<div class="store-container">
+  <div class="header">
+    <h1>Magazin Online</h1>
+    <button (click)="logout()" class="logout-btn">Deconectare</button>
+  </div>
+
+  <div class="products-grid">
+    <div class="product-card" *ngFor="let p of products">
+      
+      <div class="card-image">
+        <img [src]="p.imageUrl || 'https://via.placeholder.com/200'" alt="{{ p.name }}">
+      </div>
+
+      <div class="card-details">
+        <h3>{{ p.name }}</h3>
+        <p class="description">{{ p.description }}</p>
+        <p class="price">{{ p.price }} RON</p>
+        
+        <button (click)="addToCart(p)" class="cart-btn">Adaugă în Coș</button>
+      </div>
+    </div>
+  </div>
+  
+  <p *ngIf="products.length === 0" class="empty-msg">Nu există produse momentan.</p>
+</div>

@@ -25,17 +25,11 @@ export class LoginComponent {
   onSubmit(): void {
     this.errorMessage = ''; 
 
-    // Serviciul 'authService.login()' a fost actualizat (la Pasul 1)
-    // Acum trimite JSON și salvează token-ul automat (datorită 'tap')
+    
     this.authService.login(this.username, this.password).subscribe({
       
         next: (response: any) => { 
-          // Răspunsul conține { token: "...", role: "...", username: "..." }
-          // Serviciul a salvat deja totul în localStorage.
-          // Trebuie doar să redirecționăm.
-
-          // --- MODIFICARE CRUCIALĂ ---
-          // Backend-ul (JwtUtil) trimite acum rolul complet, ex: "ROLE_ADMIN"
+          
           if (response.role === 'ROLE_ADMIN') { 
             this.router.navigate(['/admin/dashboard']);
           } else {
@@ -44,7 +38,7 @@ export class LoginComponent {
         },
         
         error: (err: any) => { 
-          // Răspunsul de eroare de la backend-ul JWT este acum text simplu
+         
           if (err.status === 401) {
             this.errorMessage = 'Autentificare eșuată. Utilizator sau parolă incorectă.';
           } else {

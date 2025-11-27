@@ -54,6 +54,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
             // 3. Validează token-ul (verifică semnătura și data expirării)
             if (jwtUtil.validateToken(jwt, userDetails)) {
+
+                System.out.println("--- DEBUG AUTH ---");
+                System.out.println("Utilizator: " + userDetails.getUsername());
+                System.out.println("Roluri (Authorities): " + userDetails.getAuthorities());
+                System.out.println("------------------");
                 
                 // Dacă token-ul e valid, îl "setăm" manual ca autentificare validă
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(

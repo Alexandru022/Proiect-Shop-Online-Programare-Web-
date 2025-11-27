@@ -1,1 +1,41 @@
-<p>admin-dashboard works!</p>
+<div class="admin-container">
+  <div class="header">
+    <h1>Panou Administrare</h1>
+    <button (click)="logout()" class="logout-btn">Deconectare</button>
+  </div>
+
+  <div class="add-product-section">
+    <h3>Adaugă Produs Nou</h3>
+    <form (ngSubmit)="addProduct()">
+      <input type="text" placeholder="Nume Produs" [(ngModel)]="newProduct.name" name="name" required>
+      <input type="text" placeholder="Descriere" [(ngModel)]="newProduct.description" name="desc" required>
+      <input type="number" placeholder="Preț" [(ngModel)]="newProduct.price" name="price" required>
+      <input type="text" placeholder="URL Imagine" [(ngModel)]="newProduct.imageUrl" name="img">
+      <button type="submit">Salvează Produsul</button>
+    </form>
+  </div>
+
+  <hr>
+
+  <h3>Lista Produse</h3>
+  <table class="product-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nume</th>
+        <th>Preț</th>
+        <th>Acțiuni</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let p of products">
+        <td>{{ p.id }}</td>
+        <td>{{ p.name }}</td>
+        <td>{{ p.price }} RON</td>
+        <td>
+          <button (click)="deleteProduct(p.id!)" class="delete-btn">Șterge</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

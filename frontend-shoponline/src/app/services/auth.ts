@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs'; // Importăm 'tap'
+import { Observable, tap } from 'rxjs'; 
 
 @Injectable({
   providedIn: 'root'
@@ -11,21 +11,18 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
-  /**
-   * Noua metodă de Login: Trimite un JSON, primește un token.
-   */
+  
   login(username: string, password: string): Observable<any> {
     
-    // 1. Creăm corpul cererii (JSON-ul)
+    
     const authRequest = {
       username: username,
       password: password
     };
 
-    // 2. Trimitem cererea POST cu corpul JSON
+    
     return this.http.post<any>(this.loginUrl, authRequest).pipe(
-      // 3. Folosim 'tap' pentru a "spiona" răspunsul reușit
-      //    și a salva token-ul și rolul înainte de a-l trimite componentei
+      
       tap(response => {
         if (response.token) {
           this.saveToken(response.token);
@@ -65,7 +62,7 @@ export class AuthService {
   }
 
   /**
-   * Log out: Șterge totul din localStorage
+   * Log out
    */
   logout(): void {
     localStorage.removeItem('authToken');

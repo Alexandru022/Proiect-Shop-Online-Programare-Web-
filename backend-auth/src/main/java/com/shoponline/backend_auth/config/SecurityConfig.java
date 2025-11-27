@@ -41,10 +41,24 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             
             .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/api/auth/login").permitAll() // Permitem endpoint-ul de login
-                .requestMatchers("/h2-console/**").permitAll()
-                .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                .requestMatchers("/api/client/**").hasAnyRole("CLIENT", "ADMIN")
+                // 1. Rute publice
+                .requestMatchers("/api/auth/**").permitAll() // Login
+                .requestMatchers("/h2-console/**").permitAll() // Consola H2 (dacă o mai ai)
+                .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll() // CORS Pre-flight
+                
+
+                // 2. Rute pentru PRODUSE
+                // Oricine (chiar și anonim) poate vedea produsele
+                .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/products/**").permitAll()
+                
+                // Doar cei cu autoritatea EXACTĂ "ROLE_ADMIN" pot adăuga/șterge
+                .requestMatchers("/api/products/**").hasAuthority("ROLE_ADMIN")
+
+                // 3. Alte rute specifice
+                .requestMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN")
+                .requestMatchers("/api/client/**").hasAnyAuthority("ROLE_CLIENT", "ROLE_ADMIN")
+
+                // 4. Orice altceva cere autentificare
                 .anyRequest().authenticated()
             )
             
