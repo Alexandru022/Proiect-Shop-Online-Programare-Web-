@@ -36,23 +36,23 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         String username = null;
         String jwt = null;
 
-        // 1. Verifică dacă header-ul 'Authorization' există și începe cu "Bearer "
+
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            jwt = authorizationHeader.substring(7); // Extrage token-ul (șterge "Bearer ")
+            jwt = authorizationHeader.substring(7); 
             try {
                 username = jwtUtil.extractUsername(jwt);
             } catch (Exception e) {
-                // Token-ul este invalid sau expirat
+                
                 System.out.println("Eroare la extragerea username-ului: " + e.getMessage());
             }
         }
 
-        // 2. Dacă avem un username și nu este deja autentificat în contextul de securitate
+        
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
-            // 3. Validează token-ul (verifică semnătura și data expirării)
+            
             if (jwtUtil.validateToken(jwt, userDetails)) {
 
                 System.out.println("--- DEBUG AUTH ---");
@@ -60,7 +60,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 System.out.println("Roluri (Authorities): " + userDetails.getAuthorities());
                 System.out.println("------------------");
                 
-                // Dacă token-ul e valid, îl "setăm" manual ca autentificare validă
+            
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
                 usernamePasswordAuthenticationToken
@@ -69,7 +69,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             }
         }
         
-        // Continuă lanțul de filtre (trimite cererea mai departe)
+        
         chain.doFilter(request, response);
     }
 }

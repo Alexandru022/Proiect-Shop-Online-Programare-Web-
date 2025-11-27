@@ -1,6 +1,6 @@
-package com.shoponline.backend_auth.model; // Verifică numele pachetului!
+package com.shoponline.backend_auth.model; 
 
-import jakarta.persistence.Entity; // <-- IMPORTANT
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -8,7 +8,7 @@ import jakarta.persistence.Table;
 import lombok.Data;
 
 @Data
-@Entity // <-- ACEASTA ESTE ESENȚIALĂ! Fără ea, primești eroarea "Not a managed type"
+@Entity 
 @Table(name = "products")
 public class Product {
 

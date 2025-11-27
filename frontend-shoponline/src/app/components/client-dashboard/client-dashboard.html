@@ -1,25 +1,59 @@
 <div class="store-container">
-  <div class="header">
-    <h1>Magazin Online</h1>
-    <button (click)="logout()" class="logout-btn">Deconectare</button>
-  </div>
+  
+  <mat-toolbar color="primary" class="navbar">
+    <span class="logo-text">TechShop</span>
+    
+    <div class="search-container">
+      <input type="text" 
+             placeholder="Caută produse..." 
+             [(ngModel)]="searchText" 
+             (keyup)="applyFilter()"
+             class="search-input">
+      <mat-icon class="search-icon">search</mat-icon>
+    </div>
 
-  <div class="products-grid">
-    <div class="product-card" *ngFor="let p of products">
-      
-      <div class="card-image">
-        <img [src]="p.imageUrl || 'https://via.placeholder.com/200'" alt="{{ p.name }}">
-      </div>
+    <span class="spacer"></span>
+    
+    <button mat-icon-button (click)="goToCart()" class="cart-icon-btn">
+      <mat-icon [matBadge]="cartCount" matBadgeColor="warn" [matBadgeHidden]="cartCount === 0">
+        shopping_cart
+      </mat-icon>
+    </button>
 
-      <div class="card-details">
-        <h3>{{ p.name }}</h3>
-        <p class="description">{{ p.description }}</p>
-        <p class="price">{{ p.price }} RON</p>
+    <button mat-button (click)="logout()">
+      <mat-icon>logout</mat-icon> <span class="hide-mobile">Deconectare</span>
+    </button>
+  </mat-toolbar>
+
+  <div class="content">
+    
+    <div class="products-grid">
+      <mat-card class="product-card" *ngFor="let p of filteredProducts">
         
-        <button (click)="addToCart(p)" class="cart-btn">Adaugă în Coș</button>
-      </div>
+        <div class="image-container">
+            <img [src]="p.imageUrl || 'https://via.placeholder.com/300'" alt="{{ p.name }}">
+        </div>
+
+        <mat-card-header>
+          <mat-card-title>{{ p.name }}</mat-card-title>
+          <mat-card-subtitle>{{ p.price }} RON</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <p class="description">{{ p.description }}</p>
+        </mat-card-content>
+
+        <mat-card-actions align="end">
+          <button mat-raised-button color="accent" (click)="addToCart(p)">
+            <mat-icon>add_shopping_cart</mat-icon> Adaugă
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+
+    <div *ngIf="filteredProducts.length === 0" class="empty-state">
+      <mat-icon class="large-icon">search_off</mat-icon>
+      <p>Nu am găsit niciun produs pentru "{{ searchText }}".</p>
     </div>
   </div>
-  
-  <p *ngIf="products.length === 0" class="empty-msg">Nu există produse momentan.</p>
 </div>

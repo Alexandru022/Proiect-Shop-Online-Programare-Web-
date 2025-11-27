@@ -6,7 +6,7 @@ describe('Product', () => {
   let service: Product;
 
   beforeEach(() => {
-    // No need to inject Product if it's just a type/model
+    
     service = {} as Product;
   });
 

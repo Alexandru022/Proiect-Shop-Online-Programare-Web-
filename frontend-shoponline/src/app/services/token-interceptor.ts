@@ -15,20 +15,20 @@ export class TokenInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     
-    // Ia token-ul din serviciul nostru
+    
     const token = this.authService.getToken();
 
-    // Verifică dacă token-ul există
+    
     if (token) {
-      // Clonează cererea și adaugă noul header 'Authorization'
+      
       request = request.clone({
         setHeaders: {
-          Authorization: `Bearer ${token}` // Acesta este formatul "Bearer"
+          Authorization: `Bearer ${token}` 
         }
       });
     }
 
-    // Trimite cererea clonată (cu sau fără token) mai departe
+    
     return next.handle(request);
   }
 }

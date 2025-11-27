@@ -1,85 +1,70 @@
 
-.login-container {
+.login-wrapper {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f5f5f5; 
+ 
+  background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+}
+
+
+.login-content {
+  display: flex;
+  flex-direction: column; 
+  align-items: center;    
+  gap: 20px;              
+}
+
+
+.app-title {
+  font-size: 3.5rem;      
+  font-weight: 700;       
+  color: #3f51b5;         
+  margin: 0;             
+  letter-spacing: -1px;  
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.1); 
+  font-family: 'Roboto', sans-serif;
+}
+
+
+.login-card {
+  width: 350px;
+  max-width: 90vw; 
+  padding: 20px 20px 10px 20px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1); 
+}
+
+
+.full-width {
   width: 100%;
-  max-width: 400px; 
-  margin: 100px auto; 
-  padding: 30px;
-  background-color: #ffffff;
-  border-radius: 10px; 
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
-  font-family: Arial, sans-serif; 
+  display: block;
 }
 
+.mt-2 {
+  margin-top: 10px;
+}
 
-.login-container h2 {
+.actions-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.error-text {
+  color: #f44336;
   text-align: center;
-  color: #333;
-  margin-bottom: 25px;
+  margin: 10px 0;
+  font-size: 0.9rem;
 }
 
-
-.form-group {
-  margin-bottom: 20px;
-}
-
-
-.form-group label {
-  display: block; 
-  margin-bottom: 8px;
-  color: #555;
-  font-weight: bold;
-}
-
-/* Cmpurile de text*/
-.form-group input {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  box-sizing: border-box; 
-  transition: border-color 0.3s; 
-}
-
-
-.form-group input:focus {
-  border-color: #007bff; 
-  outline: none; 
-}
-
-/* Butonul de submit */
-button {
-  width: 100%;
-  padding: 12px;
-  background-color: #077a4e; 
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: bold;
-  transition: background-color 0.3s;
-}
-
-
-button:hover {
-  background-color: #06a113;
-}
-
-
-.error-message {
-  color: #dc3545; 
-  background-color: #f8d7da; 
-  border: 1px solid #f5c6cb;
-  padding: 10px;
-  border-radius: 5px;
+mat-card-header {
+  justify-content: center;
+  margin-bottom: 15px;
   text-align: center;
-  margin-top: 15px;
 }
 
-
-.login-container p:last-child {
+mat-card-title, mat-card-subtitle {
+  display: block;
   text-align: center;
-  color: #888;
-  font-size: 14px;
-  margin-top: 20px;
 }

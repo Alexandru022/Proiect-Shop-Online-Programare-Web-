@@ -1,34 +1,42 @@
-<div class="login-container">
-  <h2>Autentificare</h2>
+<div class="login-wrapper">
   
-  <form (ngSubmit)="onSubmit()">
-    <div class="form-group">
-      <label for="username">Utilizator:</label>
-      <input 
-        type="text" 
-        id="username" 
-        name="username"
-        [(ngModel)]="username" 
-        required
-      >
-    </div>
-    
-    <div class="form-group">
-      <label for="password">Parolă:</label>
-      <input 
-        type="password" 
-        id="password" 
-        name="password"
-        [(ngModel)]="password" 
-        required
-      >
-    </div>
-    
-    <button type="submit">Loghează-te</button>
-  </form>
+  <div class="login-content">
+    <h1 class="app-title">TechShop</h1>
 
-  <p *ngIf="errorMessage" class="error-message">
-    {{ errorMessage }}
-  </p>
+    <mat-card class="login-card">
+      <mat-card-header>
+        <mat-card-title>Bine ai venit!</mat-card-title>
+        <mat-card-subtitle>Te rugăm să te autentifici</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <form (ngSubmit)="onSubmit()">
+          
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Utilizator</mat-label>
+            <input matInput [(ngModel)]="username" name="username" required>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Parolă</mat-label>
+            <input matInput type="password" [(ngModel)]="password" name="password" required>
+          </mat-form-field>
+
+          <p *ngIf="errorMessage" class="error-text">{{ errorMessage }}</p>
+
+          <mat-card-actions class="actions-column">
+            <button mat-raised-button color="primary" type="submit" class="full-width">
+              Loghează-te
+            </button>
+
+            <button mat-button type="button" color="accent" (click)="goToRegister()" class="full-width mt-2">
+              Nu ai cont? Creează unul
+            </button>
+          </mat-card-actions>
+        
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
 
 </div>

@@ -1,31 +1,45 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
-// Importă componentele
-import { LoginComponent } from './components/login/login';
-import { AdminDashboard } from './components/admin-dashboard/admin-dashboard';
+import { RegisterComponent } from './components/register/register';
+import { LoginComponent } from './components/login/login'; 
+import { AdminDashboard } from './components/admin-dashboard/admin-dashboard'; 
 import { ClientDashboard } from './components/client-dashboard/client-dashboard';
-    
-// 1. IMPORTĂ NOUA GARDĂ FUNCȚIONALĂ
-import { authGuard } from './services/auth-guard'; // <-- Numele funcției, nu al clasei
+import { CartComponent } from './components/cart/cart'; 
+
+
+import { authGuard } from './services/auth-guard'; 
 
 const routes: Routes = [
-  { path: '', component: LoginComponent },
   
-  // 2. APLICĂ GARDA FUNCȚIONALĂ
+  { path: '', component: LoginComponent },
+
+  { path: '', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
+  
+ 
   { 
     path: 'admin/dashboard', 
     component: AdminDashboard,
-    canActivate: [authGuard], // <-- Folosește funcția 'authGuard'
+    canActivate: [authGuard], 
     data: { role: 'ROLE_ADMIN' } 
   },
+  
   
   { 
     path: 'client/dashboard', 
     component: ClientDashboard,
-    canActivate: [authGuard], // <-- Folosește funcția 'authGuard'
-    data: { role: 'ROLE_CLIENT' }
+    canActivate: [authGuard],
+    data: { role: 'ROLE_CLIENT' } 
   },
+
+ 
+  { 
+    path: 'cart', 
+    component: CartComponent, 
+    canActivate: [authGuard],
+    data: { role: 'ROLE_CLIENT' } 
+  },
+  
   
   { path: '**', redirectTo: '' } 
 ];

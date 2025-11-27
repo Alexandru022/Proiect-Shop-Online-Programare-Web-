@@ -1,0 +1,44 @@
+<div class="cart-container">
+  <mat-card class="cart-card">
+    <mat-card-header>
+      <mat-card-title>Coșul de Cumpărături</mat-card-title>
+      <mat-card-subtitle>{{ items.length }} produse</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-list role="list" *ngIf="items.length > 0; else emptyCart">
+        
+        <div *ngFor="let item of items; let i = index">
+          <mat-list-item>
+            <span matListItemTitle>{{ item.name }}</span>
+            <span matListItemLine>{{ item.price }} RON</span>
+            
+            <button mat-icon-button color="warn" (click)="removeItem(i)" matListItemMeta>
+              <mat-icon>remove_circle_outline</mat-icon>
+            </button>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+        </div>
+
+        <div class="total-section">
+          <h3>Total: {{ total }} RON</h3>
+        </div>
+
+      </mat-list>
+
+      <ng-template #emptyCart>
+        <div class="empty-state">
+          <mat-icon>shopping_cart</mat-icon>
+          <p>Coșul este gol.</p>
+        </div>
+      </ng-template>
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <button mat-button (click)="goBack()">Înapoi la Magazin</button>
+      <button mat-raised-button color="primary" (click)="checkout()" [disabled]="items.length === 0">
+        Finalizează Comanda
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

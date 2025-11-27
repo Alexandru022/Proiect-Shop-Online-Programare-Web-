@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-@AllArgsConstructor // Generează un constructor cu toate argumentele (token, role, username)
+@AllArgsConstructor 
 public class AuthResponse {
     private String token;
     private String role;

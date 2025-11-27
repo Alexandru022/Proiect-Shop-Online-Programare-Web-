@@ -1,93 +1,196 @@
+
 .store-container {
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+.content {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 30px;
-  border-bottom: 2px solid #eee;
-  padding-bottom: 10px;
+
+.navbar {
+
+  background-color: #3f51b5 !important;
+  
+
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  margin-bottom: 20px;
+  
+
+  color: #ffffff !important;
 }
 
-.logout-btn {
-  background-color: #dc3545;
-  color: white;
+
+.navbar button,
+.navbar mat-icon,
+.navbar span {
+  color: #ffffff !important;
+  background-color: transparent !important; 
+}
+
+
+.navbar button:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important; 
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.cart-icon-btn {
+  margin-right: 10px;
+}
+
+.logo-text {
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-right: 20px;
+  display: block;
+}
+
+
+.search-container {
+  position: relative;
+  width: 100%; 
+  max-width: 500px;
+  margin-left: 20px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px 15px 12px 45px; 
+  border-radius: 25px; 
   border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
+  
+
+  background-color: #ffffff; 
+  color: #333333; 
+  
+  font-size: 1rem;
+  outline: none;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2); 
+  transition: all 0.3s ease;
 }
 
-/* GRILA DE PRODUSE */
+
+.search-input::placeholder {
+  color: #888;
+}
+
+
+.search-input:focus {
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3); 
+}
+
+
+.search-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #555; 
+  pointer-events: none;
+}
+
+
+@media (max-width: 768px) {
+  .search-container {
+    max-width: 200px; 
+  }
+}
+
+
 .products-grid {
   display: grid;
-  /* Creează automat coloane (minim 250px lățime) */
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 25px;
 }
 
-/* CARDUL PRODUSULUI */
+
 .product-card {
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  overflow: hidden;
-  background: white;
-  transition: transform 0.2s;
+  height: 100%;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .product-card:hover {
-  transform: translateY(-5px); /* Efect de ridicare la mouse over */
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
 }
 
-.card-image img {
+
+.image-container {
+  height: 220px;
   width: 100%;
-  height: 200px;
-  object-fit: cover; /* Asigură că imaginea umple spațiul frumos */
-}
-
-.card-details {
-  padding: 15px;
-  flex-grow: 1;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  padding: 15px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #f0f0f0;
 }
 
-.card-details h3 {
-  margin: 0 0 10px;
-  font-size: 1.1rem;
+.image-container img {
+  max-height: 100%;
+  max-width: 100%;
+  width: auto;      
+  height: auto;     
+  object-fit: contain; 
+}
+
+mat-card-header {
+  margin-top: 10px;
+}
+
+mat-card-content {
+  padding: 16px;
+  flex-grow: 1;
 }
 
 .description {
   color: #666;
-  font-size: 0.9rem;
-  flex-grow: 1; /* Împinge prețul în jos */
+  font-size: 0.95rem;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.price {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #28a745;
-  margin: 10px 0;
+
+.empty-state {
+  text-align: center;
+  color: #999;
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.cart-btn {
-  width: 100%;
-  padding: 10px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
+.large-icon {
+  font-size: 64px;
+  height: 64px;
+  width: 64px;
+  margin-bottom: 10px;
+  opacity: 0.5;
 }
 
-.cart-btn:hover {
-  background-color: #0056b3;
+
+@media (max-width: 600px) {
+  .hide-mobile {
+    display: none;
+  }
+  .search-container {
+    width: 50%;
+  }
+  .logo-text {
+    display: none; 
+  }
 }

@@ -45,7 +45,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/**").permitAll() // Login
                 .requestMatchers("/h2-console/**").permitAll() // Consola H2 (dacă o mai ai)
                 .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll() // CORS Pre-flight
-                
+                .requestMatchers("/error").permitAll()
 
                 // 2. Rute pentru PRODUSE
                 // Oricine (chiar și anonim) poate vedea produsele

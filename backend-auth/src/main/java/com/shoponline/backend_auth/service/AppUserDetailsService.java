@@ -12,15 +12,15 @@ import org.springframework.stereotype.Service;
 import com.shoponline.backend_auth.model.User;
 import com.shoponline.backend_auth.repository.UserRepository;
 
-@Service // Marchează clasa ca un serviciu Spring
+@Service 
 public class AppUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private UserRepository userRepository; // Injectăm repository-ul
+    private UserRepository userRepository; 
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // Aceasta este exact logica pe care o aveai în SecurityConfig
+        
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Utilizatorul nu a fost găsit: " + username));
         

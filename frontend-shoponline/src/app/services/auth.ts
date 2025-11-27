@@ -11,6 +11,17 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
+
+  register(username: string, password: string): Observable<any> {
+    const registerData = {
+      username: username,
+      password: password
+    };
+    
+    return this.http.post(`${this.loginUrl.replace('/login', '/register')}`, registerData, { responseType: 'text' });
+    
+  }
+
   
   login(username: string, password: string): Observable<any> {
     
@@ -33,37 +44,26 @@ export class AuthService {
     );
   }
 
-  /**
-   * Salvează token-ul JWT în localStorage
-   */
+ 
   private saveToken(token: string): void {
     localStorage.setItem('authToken', token);
   }
 
-  /**
-   * Ia token-ul din localStorage
-   */
+ 
   getToken(): string | null {
     return localStorage.getItem('authToken');
   }
 
-  /**
-   * Salvează rolul în localStorage
-   */
+ 
   private saveRole(role: string): void {
     localStorage.setItem('userRole', role);
   }
 
-  /**
-   * Salvează username-ul în localStorage
-   */
   private saveUsername(username: string): void {
     localStorage.setItem('username', username);
   }
 
-  /**
-   * Log out
-   */
+ 
   logout(): void {
     localStorage.removeItem('authToken');
     localStorage.removeItem('userRole');
